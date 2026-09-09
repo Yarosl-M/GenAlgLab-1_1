@@ -13,7 +13,6 @@
             // пока что будет: минимальному fitness из выборки соответствует вес 1,
             // затем увеличивается линейно
             Random rng = seed is null ? new() : new(seed.Value);
-            double weight_sum = 0.0;
             // минимальное значение fitness-функции, для которого вес будет равен 1
             double weight_base = instances.Min(instance => instance.FitnessValue);
             // веса для всех элементов списка
@@ -23,7 +22,7 @@
                 // значение: вес, определённый по fitness-функции
                 elementSelector: instance => instance.FitnessValue - weight_base + 1);
             // okay this one should already take in the "calibrated" weight
-            weight_sum = weights.Sum(kvp =>  kvp.Value);
+            double weight_sum = weights.Sum(kvp =>  kvp.Value);
             // опять количество в конечном массиве 
             count = (count <= 0) ? Math.Max(1, count / 2) : count;
             List<GeneticInstance> result = [];
