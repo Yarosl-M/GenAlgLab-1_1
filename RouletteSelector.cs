@@ -15,8 +15,7 @@
             Random rng = seed is null ? new() : new(seed.Value);
             double weight_sum = 0.0;
             // минимальное значение fitness-функции, для которого вес будет равен 1
-            double weight_base = instances.Min(instance =>
-            instance.Function.Get(instance.ValueReal));
+            double weight_base = instances.Min(instance => instance.FitnessValue);
             // веса для всех элементов списка
             Dictionary<GeneticInstance, double> weights = instances.ToDictionary(
                 // ключ в словаре: особь в популяции
