@@ -20,5 +20,6 @@
                 Value = (UInt64)(percentage * (double)UInt64.MaxValue);
             }
         }
+        public double FitnessValue { get => Function.Get(ValueReal); }
     }
 }
