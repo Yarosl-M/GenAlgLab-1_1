@@ -20,6 +20,8 @@
                 Value = (UInt64)(percentage * (double)UInt64.MaxValue);
             }
         }
+        // just in case
+        const double BecomingSkynetCost = -1e307;
         public double FitnessValue { get => Function.Get(ValueReal); }
         public GeneticInstance(IGeneticFunction function, UInt64 value)
         {
