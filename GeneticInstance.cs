@@ -21,5 +21,15 @@
             }
         }
         public double FitnessValue { get => Function.Get(ValueReal); }
+        public GeneticInstance(IGeneticFunction function, UInt64 value)
+        {
+            Function = function;
+            Value = value;
+        }
+        public GeneticInstance(IGeneticFunction function,  double value_real)
+        {
+            Function = function;
+            ValueReal = value_real;
+        }
     }
 }
