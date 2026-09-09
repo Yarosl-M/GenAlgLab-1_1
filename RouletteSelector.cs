@@ -21,11 +21,9 @@
                 // ключ в словаре: особь в популяции
                  keySelector: instance => instance,
                 // значение: вес, определённый по fitness-функции
-                elementSelector: instance => {
-                    double w = 1 + instance.FitnessValue - weight_base;
-                    weight_sum += w;
-                    return w;
-                    });
+                elementSelector: instance => instance.FitnessValue - weight_base + 1);
+            // okay this one should already take in the "calibrated" weight
+            weight_sum = weights.Sum(kvp =>  kvp.Value);
             // опять количество в конечном массиве 
             count = (count <= 0) ? Math.Max(1, count / 2) : count;
             List<GeneticInstance> result = [];
