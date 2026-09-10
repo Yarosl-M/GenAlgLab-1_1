@@ -10,8 +10,8 @@
         /// </summary>
         /// <param name="first">Первая особь</param>
         /// <param name="second">Вторая особь</param>
-        /// <param name="seed">(необязательно) Стартовое значение для генератора случайных чисел</param>
-        /// <returns>Пара (кортеж) из новых особей</returns>
+        /// <param name="seed">Объект генератора случайных чисел, для обеспечения повторяемости
+        /// результатов (необязательно)</returns>
         public static Tuple<GeneticInstance, GeneticInstance> Crossover(GeneticInstance first,
             GeneticInstance second, Random? rng = null)
         {
@@ -37,6 +37,14 @@
                 new(first.Function, a_high | b_low),
                 new(second.Function, b_high | a_low));
         }
+        /// <summary>
+        /// Выполняет операцию кроссинговера и рекомбинацию, но уже берёт в качестве параметра
+        /// кортеж с объектами.
+        /// </summary>
+        /// <param name="instances">Кортеж с объектами особей</param>
+        /// <param name="rng">Объект генератора случайных чисел, для обеспечения повторяемости
+        /// результатов (необязательно)</param>
+        /// <returns></returns>
         public static Tuple<GeneticInstance, GeneticInstance> Crossover(
             Tuple<GeneticInstance, GeneticInstance> instances, Random? rng = null) =>
             CrossoverOperator.Crossover(instances.Item1, instances.Item2, rng);
