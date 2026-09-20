@@ -8,4 +8,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="GeneticAlgorithm\**" />
+    <EmbeddedResource Remove="GeneticAlgorithm\**" />
+    <None Remove="GeneticAlgorithm\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ScottPlot" Version="5.1.59" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="GeneticAlgorithm\GeneticAlgorithm.csproj" />
+  </ItemGroup>
+
 </Project>

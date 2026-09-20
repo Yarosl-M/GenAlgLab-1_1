@@ -5,23 +5,21 @@
         static void Main(string[] args)
         {
             const int GenerationCount = 10;
-            List<GeneticInstance> population =
-                new List<GeneticInstance>();
+            var function = new GeneticFunction();
+            List<GeneticInstance> population = new List<GeneticInstance>();
             // first population
             var rng = new Random(1225);
             for (int i = 0; i < 64; i++)
             {
                 population.Add(
-                    new GeneticInstance(new GeneticFunction(),
-                    rng.NextDouble()));
+                    new GeneticInstance(function, rng.NextDouble()));
             }
-            foreach (var item in population)
+
+            var statsHistory = new List<GenerationStats>
             {
-                Console.WriteLine($"{item.ValueReal:F5} -> {item.FitnessValue:F5}");
-                Console.WriteLine(item.ValueReal);
-                Console.WriteLine(item.FitnessValue);
-                Console.WriteLine();
-            }
+                GenerationStats.FromPopulation(0, population, function)
+            };
+
             for (int i = 0; i < GenerationCount; i++)
             {
                 // 1) селекция
@@ -53,15 +51,65 @@
 
                     MutationOperator.Mutate(population[j], rng: rng);
                 }
+
+                statsHistory.Add(GenerationStats.FromPopulation(i + 1, population, function));
             }
-            Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            foreach (var item in population)
+
+            Console.WriteLine("Поколение | min | max | mean | std (расстояние до экстремума)");
+            foreach (var s in statsHistory)
             {
-                Console.WriteLine($"{item.ValueReal:F5} -> {item.FitnessValue:F5}");
-                Console.WriteLine(item.ValueReal);
-                Console.WriteLine(item.FitnessValue);
-                Console.WriteLine();
+                Console.WriteLine(
+                    $"{s.Generation,3} | {s.MinDistance:F5} | {s.MaxDistance:F5} | " +
+                    $"{s.MeanDistance:F5} | {s.StdDevDistance:F5}");
             }
+
+            PlotStats(statsHistory);
+        }
+
+        static void PlotStats(List<GenerationStats> history)
+        {
+            var plt = new ScottPlot.Plot();
+
+            double[] gens = history.Select(s => (double)s.Generation).ToArray();
+            double[] mins = history.Select(s => s.MinDistance).ToArray();
+            double[] maxs = history.Select(s => s.MaxDistance).ToArray();
+            double[] means = history.Select(s => s.MeanDistance).ToArray();
+            double[] meanPlusStd = history.Select(s => s.MeanDistance + s.StdDevDistance).ToArray();
+            double[] meanMinusStd = history.Select(s => Math.Max(0, s.MeanDistance - s.StdDevDistance)).ToArray();
+
+            var maxLine = plt.Add.Scatter(gens, maxs);
+            maxLine.LegendText = "Максимум";
+            maxLine.LineWidth = 1;
+            maxLine.MarkerSize = 4;
+
+            var minLine = plt.Add.Scatter(gens, mins);
+            minLine.LegendText = "Минимум";
+            minLine.LineWidth = 1;
+            minLine.MarkerSize = 4;
+
+            var upperLine = plt.Add.Scatter(gens, meanPlusStd);
+            upperLine.LegendText = "Среднее + σ";
+            upperLine.LinePattern = ScottPlot.LinePattern.Dashed;
+            upperLine.MarkerSize = 0;
+
+            var lowerLine = plt.Add.Scatter(gens, meanMinusStd);
+            lowerLine.LegendText = "Среднее - σ";
+            lowerLine.LinePattern = ScottPlot.LinePattern.Dashed;
+            lowerLine.MarkerSize = 0;
+
+            var meanLine = plt.Add.Scatter(gens, means);
+            meanLine.LegendText = "Среднее";
+            meanLine.LineWidth = 3;
+            meanLine.MarkerSize = 5;
+
+            plt.Title("Сходимость популяции к экстремуму по поколениям");
+            plt.XLabel("Поколение");
+            plt.YLabel("Расстояние до x экстремума");
+            plt.ShowLegend();
+
+            plt.SavePng("generation_stats.png", 1000, 600);
+            Console.WriteLine();
+            Console.WriteLine("График сохранён: generation_stats.png");
         }
     }
 }

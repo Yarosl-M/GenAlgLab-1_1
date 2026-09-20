@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37012.4 d17.14
+VisualStudioVersion = 17.14.37012.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenAlgLab-1_1", "GenAlgLab-1_1.csproj", "{A6726D84-364D-4EFB-99D2-8A762F22DF4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlgorithm", "GeneticAlgorithm\GeneticAlgorithm.csproj", "{F8CDF021-D081-44FF-A372-0B45A0435FE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A6726D84-364D-4EFB-99D2-8A762F22DF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6726D84-364D-4EFB-99D2-8A762F22DF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6726D84-364D-4EFB-99D2-8A762F22DF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8CDF021-D081-44FF-A372-0B45A0435FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8CDF021-D081-44FF-A372-0B45A0435FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8CDF021-D081-44FF-A372-0B45A0435FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8CDF021-D081-44FF-A372-0B45A0435FE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
