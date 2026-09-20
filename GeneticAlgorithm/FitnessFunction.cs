@@ -1,6 +1,6 @@
 ﻿namespace GenAlgLab_1_1
 {
-    public class GeneticFunction
+    public class FitnessFunction
     {
         public double MinX { get; init; }
         public double MaxX { get; init; }
@@ -15,7 +15,7 @@
         //}
         public double Get(double x) => Function(x);
 
-        public GeneticFunction(double min_x,  double max_x, IEnumerable<double> extremes,
+        public FitnessFunction(double min_x,  double max_x, IEnumerable<double> extremes,
             Func<double, double> function)
         {
             MinX = min_x; MaxX = max_x; ExtremumX = extremes; Function = function;
