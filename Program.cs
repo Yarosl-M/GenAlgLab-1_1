@@ -35,7 +35,7 @@
                     var second_idx = rng.Next(0, population.Count);
                     var first = population[first_idx];
                     var second = population[second_idx];
-                    var new_members = CrossoverOperator
+                    var new_members = SingleCrossoverOperator
                         .Crossover(first, second, rng);
                     to_add.Add(new_members.Item1);
                     to_add.Add(new_members.Item2);
