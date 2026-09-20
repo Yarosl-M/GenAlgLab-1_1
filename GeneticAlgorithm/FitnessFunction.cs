@@ -14,6 +14,32 @@
         //    return Math.Sin(6 * x - 1) + Math.Cos(4 * x) + 2 * Math.Pow(x, 5);
         //}
         public double Get(double x) => Function(x);
+        
+        /// <summary>
+        /// Вспомогательная функция, выполняющая преобразование: отображение величины x из диапазона
+        /// [from_a, from_b] в диапазон [MinX, MaxX]
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="from_a"></param>
+        /// <param name="from_b"></param>
+        /// <returns>Величина после преобразования (например, MapToRange(0.25, 0.0, 1.0) при MinX = 2
+        /// и MaxX = 4 вернёт 2.5).</returns>
+        public double MapToRange(double x, double from_a = 0.0, double from_b = 1.0)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Вспомогательная функция, выполняющая преобразование: отображение величины x из диапазона
+        /// [MinX, MaxX] в диапазон [to_a, to_b]
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="to_a"></param>
+        /// <param name="to_b"></param>
+        /// <returns>Величина после преобразования.</returns>
+        public double MapFromRange(double x, double to_a, double to_b)
+        {
+            throw new NotImplementedException();
+        }
 
         public FitnessFunction(double min_x,  double max_x, IEnumerable<double> extremes,
             Func<double, double> function)

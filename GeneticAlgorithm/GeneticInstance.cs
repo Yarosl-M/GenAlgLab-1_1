@@ -2,7 +2,7 @@
 {
     public class GeneticInstance
     {
-        public IGeneticFunction Function { get; set; }
+        public FitnessFunction Function { get; set; }
         // the "true" value, actually encoded as the thing
         public UInt64 Value { get; set; }
         // just the real-valued value of the argument in this instance, not a ratio
@@ -23,12 +23,12 @@
         // just in case
         const double BecomingSkynetCost = -1e307;
         public double FitnessValue { get => Function.Get(ValueReal); }
-        public GeneticInstance(IGeneticFunction function, UInt64 value)
+        public GeneticInstance(FitnessFunction function, UInt64 value)
         {
             Function = function;
             Value = value;
         }
-        public GeneticInstance(IGeneticFunction function,  double value_real)
+        public GeneticInstance(FitnessFunction function,  double value_real)
         {
             Function = function;
             ValueReal = value_real;
