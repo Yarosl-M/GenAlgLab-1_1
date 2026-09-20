@@ -19,9 +19,9 @@
         /// Вспомогательная функция, выполняющая преобразование: отображение величины x из диапазона
         /// [from_a, from_b] в диапазон [MinX, MaxX]
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="from_a"></param>
-        /// <param name="from_b"></param>
+        /// <param name="x">Величина, которую требуется преобразовать.</param>
+        /// <param name="from_a">Нижняя граница исходного диапазона (по умолчанию = 0).</param>
+        /// <param name="from_b">Верхняя граница исходного диапазона (по умолчанию = 1).</param>
         /// <returns>Величина после преобразования (например, MapToRange(0.25, 0.0, 1.0) при MinX = 2
         /// и MaxX = 4 вернёт 2.5).</returns>
         public double MapToRange(double x, double from_a = 0.0, double from_b = 1.0)
@@ -33,11 +33,11 @@
         /// Вспомогательная функция, выполняющая преобразование: отображение величины x из диапазона
         /// [MinX, MaxX] в диапазон [to_a, to_b]
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="to_a"></param>
-        /// <param name="to_b"></param>
+        /// <param name="x">Величина, которую требуется преобразовать.</param>
+        /// <param name="to_a">Нижняя граница диапазона, в который идёт преобразование (по умолчанию = 0).</param>
+        /// <param name="to_b">Верхняя граница диапазона, в который идёт преобразование (по умолчанию = 1).</param>
         /// <returns>Величина после преобразования.</returns>
-        public double MapFromRange(double x, double to_a, double to_b)
+        public double MapFromRange(double x, double to_a = 0.0, double to_b = 1.0)
         {
             return to_a + (x - MinX) * (to_b - to_a) / (MaxX - MinX);
         }
