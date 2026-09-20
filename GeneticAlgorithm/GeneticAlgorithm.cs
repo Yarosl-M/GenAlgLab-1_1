@@ -25,13 +25,14 @@ namespace GenAlgLab_1_1
             Function = function;
             Selector = selector;
             Seed = seed is null ? new Random().Next() : seed.Value;
-            // populate later
-            Instances = new GeneticInstance[instance_count];
             rng = new Random(Seed);
+            // create instance array
+            Instances = new GeneticInstance[instance_count];
+            // and populate it
             for (int i = 0; i < instance_count; i++)
             {
                 Instances[i] = new(Function,
-                    rng.NextDouble())
+                    Function.MapToRange(rng.NextDouble()));
             }
         }
     }
