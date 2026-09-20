@@ -13,6 +13,6 @@
         /// <param name="seed">Исходное значение для ГСЧ (если он будет использоваться); null для случайного стартового значения.</param>
         /// <returns>Список, содержащий оставшихся особей, отобранных по определённому алгоритму селекции.</returns>
         public IEnumerable<GeneticInstance> Select(IEnumerable<GeneticInstance> instances,
-            int count = -1, int? seed = null);
+            int count = -1, Random? rng = null);
     }
 }

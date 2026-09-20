@@ -5,9 +5,9 @@
     /// </summary>
     public class UpperHalfSelector : IGeneticSelector
     {
-        // don't need the seed in this one
+        // don't even need the rng in this one
         public IEnumerable<GeneticInstance> Select(IEnumerable<GeneticInstance> instances,
-            int count = -1, int? _ = null)
+            int count = -1, Random? _ = null)
         {
             var all_count = instances.Count();
             count = (count <= 0) ? Math.Max(1, count / 2) : count;

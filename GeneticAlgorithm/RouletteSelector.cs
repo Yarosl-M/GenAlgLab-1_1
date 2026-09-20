@@ -8,11 +8,11 @@
     public class RouletteSelector : IGeneticSelector
     {
         public IEnumerable<GeneticInstance> Select(IEnumerable<GeneticInstance> instances,
-            int count = -1, int? seed = null)
+            int count = -1, Random? rng = null)
         {
             // пока что будет: минимальному fitness из выборки соответствует вес 1,
             // затем увеличивается линейно
-            Random rng = seed is null ? new() : new(seed.Value);
+            if (rng is null) rng = new Random();
             // минимальное значение fitness-функции, для которого вес будет равен 1
             double weight_base = instances.Min(instance => instance.FitnessValue);
             // веса для всех элементов списка
@@ -21,11 +21,12 @@
                  keySelector: instance => instance,
                 // значение: вес, определённый по fitness-функции
                 elementSelector: instance => instance.FitnessValue - weight_base + 1);
-            // okay this one should already take in the "calibrated" weight
-            double weight_sum = weights.Sum(kvp =>  kvp.Value);
-            // опять количество в конечном массиве 
-            count = (count <= 0) ? Math.Max(1, count / 2) : count;
-            List<GeneticInstance> result = [];
+            // сумма "откалиброванных" весов
+            double weight_sum = weights.Sum(kvp => kvp.Value);
+            // количество в итоговом массиве
+            // если -1, то по умолчанию половина
+            count = (count <= 0) ? Math.Max(1, instances.Count() / 2) : count;
+            List<GeneticInstance> result = new(count);
             // for each element to pick
             for (int i = 0; i < count; i++)
             {
@@ -37,6 +38,7 @@
                     if (rand_val < 0)
                     {
                         result.Add(kvp.Key);
+                        //weights[kvp.Key] /= 2.0;
                         break;
                     }
                 }
