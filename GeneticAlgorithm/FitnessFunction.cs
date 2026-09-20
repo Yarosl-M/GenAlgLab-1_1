@@ -26,8 +26,9 @@
         /// и MaxX = 4 вернёт 2.5).</returns>
         public double MapToRange(double x, double from_a = 0.0, double from_b = 1.0)
         {
-            throw new NotImplementedException();
+            return MinX + (x - from_a) * (MaxX - MinX) / (from_b - from_a);
         }
+
         /// <summary>
         /// Вспомогательная функция, выполняющая преобразование: отображение величины x из диапазона
         /// [MinX, MaxX] в диапазон [to_a, to_b]
@@ -38,7 +39,7 @@
         /// <returns>Величина после преобразования.</returns>
         public double MapFromRange(double x, double to_a, double to_b)
         {
-            throw new NotImplementedException();
+            return to_a + (x - MinX) * (to_b - to_a) / (MaxX - MinX);
         }
 
         public FitnessFunction(double min_x,  double max_x, IEnumerable<double> extremes,
