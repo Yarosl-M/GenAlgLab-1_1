@@ -7,7 +7,7 @@
         // OLD FUNCTION, extremes are:
         // maximum at (0.3171 1.0892)
         // minimum at (0.807 -0.9563)
-        public IEnumerable<double> ExtremumX { get; init; }
+        public IList<double> ExtremumX { get; init; }
         public Func<double, double> Function { get; init; }
         //public double Get(double x)
         //{
