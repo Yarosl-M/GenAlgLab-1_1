@@ -44,11 +44,13 @@ namespace GenAlgLab_1_1
 
         public GeneticAlgorithm(FitnessFunction function, IGeneticSelector selector,
             IMutationOperator mutator, ICrossoverOperator crossoverOperator,
-            int? seed=null, int instance_count=64, double mutation_rate = 0.05,
+            int? seed=null, int generations=16, int instance_count=64, double mutation_rate = 0.05,
             int min_mutation_count=1, int max_mutation_count=2)
         {
             Function = function;
             Selector = selector;
+            CrossoverOperator = crossoverOperator;
+            GenerationCount = generations;
             InstanceCount = instance_count;
             MutationRate = mutation_rate;
             MutationCountMin = min_mutation_count;
