@@ -21,12 +21,10 @@
 
                 for (int i = 0; i < Function.ParameterCount; i++)
                 {
-                    double percentage =
-                        (double)Value[i] / UInt64.MaxValue;
-
-                    result[i] =
-                        percentage * (Function.MaxX[i] - Function.MinX[i])
-                        + Function.MinX[i];
+                    result[i] = Function.MapToRange(
+                        x: (double)Value[i] / UInt64.MaxValue, // this value is in [0.0, 1.0]
+                        parameter_idx: i // that's why we don't need to specify the range bc that's the default
+                    );
                 }
 
                 return result;
@@ -37,12 +35,9 @@
 
                 for (int i = 0; i < Function.ParameterCount; i++)
                 {
-                    double percentage =
-                        (value[i] - Function.MinX[i]) /
-                        (Function.MaxX[i] - Function.MinX[i]);
+                    double percentage = Function.MapFromRange(x: value[i], parameter_idx: i);
 
-                    Value[i] =
-                        (UInt64)(percentage * UInt64.MaxValue);
+                    Value[i] = (UInt64)(percentage * UInt64.MaxValue);
                 }
             }
         }
