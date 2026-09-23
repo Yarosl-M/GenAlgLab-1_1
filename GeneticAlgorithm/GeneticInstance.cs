@@ -3,32 +3,59 @@
     public class GeneticInstance
     {
         public FitnessFunction Function { get; set; }
-        // the "true" value, actually encoded as the thing
-        public UInt64 Value { get; set; }
-        // just the real-valued value of the argument in this instance, not a ratio
-        public double ValueReal {
+
+        // Каждый элемент вектора кодирует один параметр/"ген"
+        // это "истинное" значение, т. е. the source of truth (grayscale Morgan Freeman reference),
+        // именно оно будет храниться в памяти
+        public UInt64[] Value { get; set; }
+
+        // Вещественные значения всех параметров
+        // вычисляются путём отображения из целочисленного диапазона [0..2^64-1] для Value
+        // в вещественный диапазон [MinX; MaxX] для соответствующего параметра
+        // TODO: probably heavy refactor of dis
+        public double[] ValueReal
+        {
             get
             {
-                double percentage = (double)Value / (double)UInt64.MaxValue;
-                return percentage * (Function.MaxX - Function.MinX) + Function.MinX;
+                double[] result = new double[Function.ParameterCount];
+
+                for (int i = 0; i < Function.ParameterCount; i++)
+                {
+                    double percentage =
+                        (double)Value[i] / UInt64.MaxValue;
+
+                    result[i] =
+                        percentage * (Function.MaxX[i] - Function.MinX[i])
+                        + Function.MinX[i];
+                }
+
+                return result;
             }
             set
             {
-                // so we get a value which is a length of segment between min and max value
-                // and then divide it by length that whole segment, so this should be correct?
-                double percentage = (value - Function.MinX) / (Function.MaxX - Function.MinX);
-                Value = (UInt64)(percentage * (double)UInt64.MaxValue);
+                Value = new UInt64[Function.ParameterCount];
+
+                for (int i = 0; i < Function.ParameterCount; i++)
+                {
+                    double percentage =
+                        (value[i] - Function.MinX[i]) /
+                        (Function.MaxX[i] - Function.MinX[i]);
+
+                    Value[i] =
+                        (UInt64)(percentage * UInt64.MaxValue);
+                }
             }
         }
-        // just in case
-        const double BecomingSkynetCost = -1e307;
-        public double FitnessValue { get => Function.Get(ValueReal); }
-        public GeneticInstance(FitnessFunction function, UInt64 value)
+        public double FitnessValue
+        {
+            get => Function.Get(ValueReal);
+        }
+        public GeneticInstance(FitnessFunction function, UInt64[] value)
         {
             Function = function;
             Value = value;
         }
-        public GeneticInstance(FitnessFunction function,  double value_real)
+        public GeneticInstance(FitnessFunction function, double[] value_real)
         {
             Function = function;
             ValueReal = value_real;
