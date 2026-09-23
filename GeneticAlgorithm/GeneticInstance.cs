@@ -3,6 +3,7 @@
     public class GeneticInstance
     {
         public FitnessFunction Function { get; init; }
+        public int ParameterCount { get => Function.ParameterCount; }
 
         // Каждый элемент вектора кодирует один параметр/"ген"
         // это "истинное" значение, т. е. the source of truth (grayscale Morgan Freeman reference),
