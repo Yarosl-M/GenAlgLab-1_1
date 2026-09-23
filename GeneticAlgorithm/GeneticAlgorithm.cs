@@ -115,55 +115,5 @@ namespace GenAlgLab_1_1
 
             return generations_passed++;
         }
-
-        // запуск симуляции генетического алгоритма
-        public void Run()
-        {
-            throw new NotImplementedException();
-            var population = Population;
-            
-            for (int i = 0; i < GenerationCount; i++)
-            {
-
-                // размер этого массива в 2 раза меньше
-                // для скрещивания нужно взять ещё половину от этого
-                // нет, не половину?
-                // если брать по паре, то да, ещё в два раза меньше итераций
-
-                /* 
-                чтобы снова дополнить до полного размера
-                selected: размер population / 2
-                (InstanceCount / 2), если нечётный — с округлением вниз
-                maybe we should just not care about odd counts? and assume only even or,
-                even better, sizes divisible by 4
-                whatever
-                population - selected будет = половина population, но когда population
-                нечётный, то здесь будет ещё +1
-                то есть надо получить половину, округлённую вверх (может тоже быть нечётным btw)
-                to_add = сколько особей добавить до полной population
-                пусть будет to_add = population - selected (фактически с округлением вверх)
-                */
-                // to_add (new)
-
-                // если в одном из этих массивов (не помню, каком именно) было нечётное количество,
-                // то сейчас было бы на 1 больше, поэтому здесь надо убедиться, что количество элементов
-                // равно исходному
-
-
-
-                
-#if false // grayscale Morgan Freeman but it's the opposite day
-                for (int j = 0; j < to_add.Length - to_add.Length / 2; j++)
-                {
-                    var first_idx = rng.Next(0, population.Length);
-                    var second_idx = rng.Next(0, population.Length);
-                    var first = population[first_idx];
-                    var second = population[second_idx];
-                    var new_members = CrossoverOperator.Crossover(first, second, rng);
-                    to_add[j] = 
-                }
-#endif
-            } // for (...) (main generation loop)
-        }
     }
 }
