@@ -10,7 +10,7 @@
         // minimum at (0.807 -0.9563)
         // элементы внешнего списка — просто отдельные экстремумы
         // внутри каждого списка — уже список координат
-        public double[][] ExtremumX { get; init; }
+        public double[,] ExtremumX { get; init; }
         public Func<double[], double> Function { get; init; }
         //public double Get(double x)
         //{
@@ -54,13 +54,29 @@
                 (to_b - to_a) / (MaxX[parameter_idx] - MinX[parameter_idx]);
         }
 
-        public FitnessFunction(IReadOnlyCollection<double> min_x, IReadOnlyCollection<double> max_x,
-            IReadOnlyCollection<double[]> extremes, Func<double[], double> function,
+        public FitnessFunction(IReadOnlyCollection<double> min_x,
+            IReadOnlyCollection<double> max_x,
+            IReadOnlyCollection<double[]> extremes,
+            Func<double[], double> function,
             int parameter_count=1)
         {
             ParameterCount = parameter_count;
-            MinX = min_x.ToArray(); MaxX = max_x.ToArray();
-            ExtremumX = extremes.ToArray(); Function = function;
+            MinX = min_x.ToArray();
+            MaxX = max_x.ToArray();
+
+            var extremum_rows = extremes.ToArray();
+            ExtremumX = new double[extremum_rows.Length, parameter_count];
+
+            for (int extremum_idx = 0; extremum_idx < extremum_rows.Length; extremum_idx++)
+            {
+                for (int parameter_idx = 0; parameter_idx < parameter_count; parameter_idx++)
+                {
+                    ExtremumX[extremum_idx, parameter_idx] =
+                        extremum_rows[extremum_idx][parameter_idx];
+                }
+            }
+
+            Function = function;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using GeneticAlgorithm;
+using ScottPlot;
 
 namespace GenAlgLab_1_1
 {
@@ -14,37 +15,37 @@ namespace GenAlgLab_1_1
                 min_x: [-5.12],
                 max_x: [5.12],
                 extremes: [[0.0]],
-                function: x => x[0] * x[0],
+                function: x => -(x[0] * x[0]),
                 parameter_count: 1);
 
             FitnessFunction sphere_2d = new(
                 min_x: [-5.12, -5.12],
                 max_x: [5.12, 5.12],
                 extremes: [[0.0, 0.0]],
-                function: x => x[0] * x[0] + x[1] * x[1],
+                function: x => -(x[0] * x[0] + x[1] * x[1]),
                 parameter_count: 2);
 
             FitnessFunction sphere_3d = new(
                 min_x: [-5.12, -5.12, -5.12],
                 max_x: [5.12, 5.12, 5.12],
                 extremes: [[0.0, 0.0, 0.0]],
-                function: x => x[0] * x[0] + x[1] * x[1] + x[2] * x[2],
+                function: x => -(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]),
                 parameter_count: 3);
 
             FitnessFunction sphere_4d = new(
                 min_x: [-5.12, -5.12, -5.12, -5.12],
                 max_x: [5.12, 5.12, 5.12, 5.12],
                 extremes: [[0.0, 0.0, 0.0, 0.0]],
-                function: x => x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3],
+                function: x => -(-x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3]),
                 parameter_count: 4);
 
             FitnessFunction beale = new(
                 min_x: [-5.0, -5.0],
                 max_x: [5.0, 5.0],
                 extremes: [[3, 0.5]],
-                function: x => Math.Pow(1.5 - x[0] + x[0] * x[1], 2) +
+                function: x => -(Math.Pow(1.5 - x[0] + x[0] * x[1], 2) +
                     Math.Pow(2.25 - x[0] + x[0] * x[1] * x[1], 2) +
-                    Math.Pow(2.625 - x[0] + x[0] * x[1] * x[1] * x[1], 2),
+                    Math.Pow(2.625 - x[0] + x[0] * x[1] * x[1] * x[1], 2)),
                 parameter_count: 2);
 
             IGeneticSelector half = new UpperHalfSelector();
@@ -56,7 +57,7 @@ namespace GenAlgLab_1_1
 
             Console.WriteLine("1—4 — функции сферы от 1 до 4 аргументов;");
             Console.WriteLine("5   — ранее определённая функция (1 аргумент);");
-            Console.WriteLine("5   — функция Била (2 аргумента);");
+            Console.WriteLine("6   — функция Била (2 аргумента);");
             short choice = 1;
             Console.Write("Выберите функцию: ");
             short.TryParse(Console.ReadLine(), out choice);
@@ -92,71 +93,34 @@ namespace GenAlgLab_1_1
             int seed = (new Random().Next());
             int.TryParse(Console.ReadLine(), out seed);
 
-            GeneticAlgorithm alg = new GeneticAlgorithm(function: choice_func,
+            GeneticAlgorithm alg = new GeneticAlgorithm(function: function,
                 selector: choice_select, mutator: mutator, crossoverOperator: sp,
                 seed: seed, generations: generations,
                 instance_count: count, mutation_rate: mutation_rate);
-            /////////////////////////////////////////////////////////////////////
-            const int GenerationCount = 10;
-            //var function = new GeneticFunction();
-            List<GeneticInstance> population = new List<GeneticInstance>();
-            // first population
-            var rng = new Random(1225);
-            for (int i = 0; i < 64; i++)
+
+            var stats_history = new GenerationStats[generations + 1];
+            // oh dayum
+            // the thing is, it should have 1 more stats object
+            // because it's not just after each generation but one should also
+            // be before the start of the algorithm
+            stats_history[0] = new GenerationStats(0, alg.Population);
+            int gen = 0;
+            do
             {
-                population.Add(
-                    new GeneticInstance(function, rng.NextDouble()));
-            }
+                gen = alg.Step() + 1;
+                stats_history[gen] = new(gen, alg.Population);
+            } while (gen != -1);
 
-            var statsHistory = new List<GenerationStats>
-            {
-                GenerationStats.FromPopulation(0, population, function)
-            };
-
-            for (int i = 0; i < GenerationCount; i++)
-            {
-                // 1) селекция
-                population = new UpperHalfSelector()
-                    .Select(population).ToList();
-
-                // 2) скрещивание и рекомбинация
-                var to_add = new List<GeneticInstance>();
-                // 32 -> надо сделать 16 пар
-                for (int j = 0; j <= 15; j++)
-                {
-                    var first_idx = rng.Next(0, population.Count);
-                    var second_idx = rng.Next(0, population.Count);
-                    var first = population[first_idx];
-                    var second = population[second_idx];
-                    var new_members = SingleCrossoverOperator
-                        .Crossover(first, second, rng);
-                    to_add.Add(new_members.Item1);
-                    to_add.Add(new_members.Item2);
-                }
-                // добавить в популяцию
-                population.AddRange(to_add);
-
-                // 3) мутации
-                for (int j = 0; j < population.Count; j++)
-                {
-                    // 5% шанс мутации (not exactly gonna be 5% of population but whatever)
-                    if (rng.NextDouble() > 0.05) continue;
-
-                    MutationOperator.Mutate(population[j], rng: rng);
-                }
-
-                statsHistory.Add(GenerationStats.FromPopulation(i + 1, population, function));
-            }
 
             Console.WriteLine("Поколение | min | max | mean | std (расстояние до экстремума)");
-            foreach (var s in statsHistory)
+            foreach (var s in stats_history)
             {
                 Console.WriteLine(
                     $"{s.Generation,3} | {s.MinDistance:F5} | {s.MaxDistance:F5} | " +
                     $"{s.MeanDistance:F5} | {s.StdDevDistance:F5}");
             }
 
-            PlotStats(statsHistory);
+            //PlotStats(stats_history);
         }
 
         static void PlotStats(List<GenerationStats> history)

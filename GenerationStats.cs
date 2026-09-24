@@ -28,19 +28,52 @@
 
         // YAGNI: since all usages of this class are making it from population anyway, so might as well
         // have the class only accept that anyway
-        public GenerationStats(int generation, IReadOnlyCollection<GeneticInstance> instances)
+        public GenerationStats(int generation, IList<GeneticInstance> instances)
         {
             this.Generation = generation;
 
             // NOTE: для одномерного случая это верно, но для евклидовых расстояний
             // с другим числом параметров нужно будет вычислять по-другому
+            double[] distances = new double[instances.Count];
+            double[,] extremums = instances[0].Function.ExtremumX;
+            // сначала надо вычислить расстояние до ближайшего экстремума
+            // для каждой пары точки и экстремума
+            // затем из них выбрать минимальное значение
+            for (int instance_idx = 0; instance_idx < instances.Count; instance_idx++)
+            {
+                double closest_distance = double.PositiveInfinity;
 
-            // actually I've been working on it for so long that at this point might as well
-            // just go with the multiple arguments thing in the first place, I guess
-            double[] distances = [.. instances.Select((instance) =>
-            Math.Abs(instance.ValueReal - instance.Function.ExtremumX[0]))];
+                for (int extremum_idx = 0;
+                    extremum_idx < extremums.GetLength(0);
+                    extremum_idx++)
+                {
+                    double squared_distance = 0.0;
 
-            Generation = generation;
+                    for (int parameter_idx = 0;
+                        parameter_idx < extremums.GetLength(1);
+                        parameter_idx++)
+                    {
+                        double point_coordinate =
+                            instances[instance_idx].GetValueReal(parameter_idx);
+
+                        double extremum_coordinate =
+                            extremums[extremum_idx, parameter_idx];
+
+                        double difference = point_coordinate - extremum_coordinate;
+                        squared_distance += difference * difference;
+                    }
+
+                    double distance = Math.Sqrt(squared_distance);
+
+                    if (distance < closest_distance)
+                    {
+                        closest_distance = distance;
+                    }
+                }
+
+                distances[instance_idx] = closest_distance;
+            }
+
             MinDistance = distances.Min();
             MaxDistance = distances.Max();
             MeanDistance = distances.Average();

@@ -63,8 +63,14 @@ namespace GenAlgLab_1_1
             // and populate it
             for (int i = 0; i < instance_count; i++)
             {
-                Population[i] = new(Function,
-                    Function.MapToRange(rng.NextDouble()));
+                var init_genome = new UInt64[Function.ParameterCount];
+                for (int j = 0; j < Function.ParameterCount; j++)
+                {
+                    byte[] buf = new byte[8];
+                    rng.NextBytes(buf);
+                    init_genome[j] = BitConverter.ToUInt64(buf);
+                }
+                Population[i] = new(Function, init_genome);
             }
         }
         // один шаг (итерация) генетического алгоритма
@@ -73,7 +79,8 @@ namespace GenAlgLab_1_1
         /// <summary>
         /// Выполняет один шаг (итерацию) генетического алгоритма.
         /// </summary>
-        /// <returns>Индекс только что пройденной итерации или -1, если алгоритм уже завершил работу.</returns>
+        /// <returns>Индекс только что пройденной итерации (начиная с 0 после первого поколения)
+        /// или -1, если алгоритм уже завершил работу.</returns>
         public int Step()
         {
             if (generations_passed == GenerationCount) return -1;
