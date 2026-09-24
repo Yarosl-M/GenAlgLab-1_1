@@ -11,11 +11,9 @@
         {
             var all_count = instances.Count();
             count = (count <= 0) ? Math.Max(1, count / 2) : count;
-            // temp: order just by the max value
-            GeneticInstance[] left = instances.OrderByDescending(
-                instance => instance.Function.Get(instance.ValueReal))
-                .Take(count).ToArray();
-            return left;
+            GeneticInstance[] remaining = instances.OrderByDescending(
+                instance => instance.FitnessValue).Take(count).ToArray();
+            return remaining;
         }
     }
 }
