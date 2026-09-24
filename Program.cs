@@ -10,13 +10,42 @@ namespace GenAlgLab_1_1
                 function: x => Math.Sin(6 * x[0] - 1) + Math.Cos(4 * x[0]) + 2 * Math.Pow(x[0], 5),
                 parameter_count: 1);
 
-            FitnessFunction sphere_1d = new(min_x: [-5.12], max_x: [5.12], extremes: [[0.0]],
-                function: x => x[0] * x[0], parameter_count: 1);
+            FitnessFunction sphere_1d = new(
+                min_x: [-5.12],
+                max_x: [5.12],
+                extremes: [[0.0]],
+                function: x => x[0] * x[0],
+                parameter_count: 1);
 
-            FitnessFunction sphere_2d = new(min_x: -5.12, max_x: 5.12,
-                [0.0], x => x * x);
-            FitnessFunction previous_thing = new(min_x: 0.0, max_x: 1.0,
-                [0.3171], x => Math.Sin(6 * x - 1) + Math.Cos(4 * x) + 2 * Math.Pow(x, 5));
+            FitnessFunction sphere_2d = new(
+                min_x: [-5.12, -5.12],
+                max_x: [5.12, 5.12],
+                extremes: [[0.0, 0.0]],
+                function: x => x[0] * x[0] + x[1] * x[1],
+                parameter_count: 2);
+
+            FitnessFunction sphere_3d = new(
+                min_x: [-5.12, -5.12, -5.12],
+                max_x: [5.12, 5.12, 5.12],
+                extremes: [[0.0, 0.0, 0.0]],
+                function: x => x[0] * x[0] + x[1] * x[1] + x[2] * x[2],
+                parameter_count: 3);
+
+            FitnessFunction sphere_4d = new(
+                min_x: [-5.12, -5.12, -5.12, -5.12],
+                max_x: [5.12, 5.12, 5.12, 5.12],
+                extremes: [[0.0, 0.0, 0.0, 0.0]],
+                function: x => x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3],
+                parameter_count: 4);
+
+            FitnessFunction beale = new(
+                min_x: [-5.0, -5.0],
+                max_x: [5.0, 5.0],
+                extremes: [[3, 0.5]],
+                function: x => Math.Pow(1.5 - x[0] + x[0] * x[1], 2) +
+                    Math.Pow(2.25 - x[0] + x[0] * x[1] * x[1], 2) +
+                    Math.Pow(2.625 - x[0] + x[0] * x[1] * x[1] * x[1], 2),
+                parameter_count: 2);
 
             IGeneticSelector half = new UpperHalfSelector();
             IGeneticSelector roulette = new RouletteSelector();
@@ -25,8 +54,23 @@ namespace GenAlgLab_1_1
 
             IMutationOperator mutator = new MutationOperator();
 
-            Console.Write("1 для функции сферы, 2 для определённой ранее функции: ");
-            FitnessFunction choice_func = (Console.ReadLine() == "2" ? previous_thing : sphere_2d);
+            Console.WriteLine("1—4 — функции сферы от 1 до 4 аргументов;");
+            Console.WriteLine("5   — ранее определённая функция (1 аргумент);");
+            Console.WriteLine("5   — функция Била (2 аргумента);");
+            short choice = 1;
+            Console.Write("Выберите функцию: ");
+            short.TryParse(Console.ReadLine(), out choice);
+            FitnessFunction function =
+                (new FitnessFunction[]
+                {
+                    sphere_1d,
+                    sphere_2d,
+                    sphere_3d,
+                    sphere_4d,
+                    previous_thing,
+                    beale
+                })[choice - 1];
+            //FitnessFunction choice_func = (Console.ReadLine() == "2" ? previous_thing : sphere_2d);
 
             Console.Write("1 для селекции по умолчанию, 2 для селекции методом рулетки: ");
             IGeneticSelector choice_select = (Console.ReadLine() == "2" ? roulette : half);
@@ -54,7 +98,7 @@ namespace GenAlgLab_1_1
                 instance_count: count, mutation_rate: mutation_rate);
             /////////////////////////////////////////////////////////////////////
             const int GenerationCount = 10;
-            var function = new GeneticFunction();
+            //var function = new GeneticFunction();
             List<GeneticInstance> population = new List<GeneticInstance>();
             // first population
             var rng = new Random(1225);
