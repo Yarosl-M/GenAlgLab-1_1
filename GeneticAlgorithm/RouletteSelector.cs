@@ -7,6 +7,8 @@
     /// </summary>
     public class RouletteSelector : IGeneticSelector
     {
+        // похоже, что селекторы работают исключительно со значениями функции приспособленности,
+        // а потому рефакторить их для случая нескольких переменных не надо
         public IEnumerable<GeneticInstance> Select(IEnumerable<GeneticInstance> instances,
             int count = -1, Random? rng = null)
         {
