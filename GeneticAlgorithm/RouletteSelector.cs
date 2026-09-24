@@ -39,7 +39,8 @@
                     rand_val -= kvp.Value;
                     if (rand_val < 0)
                     {
-                        result.Add(kvp.Key);
+                        result.Add(new GeneticInstance(kvp.Key.Function,
+                            kvp.Key.Value));
                         //weights[kvp.Key] /= 2.0;
                         break;
                     }
