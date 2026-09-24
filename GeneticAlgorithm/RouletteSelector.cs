@@ -22,7 +22,7 @@
                 // ключ в словаре: особь в популяции
                  keySelector: instance => instance,
                 // значение: вес, определённый по fitness-функции
-                elementSelector: instance => instance.FitnessValue - weight_base + 1);
+                elementSelector: instance => Math.Pow(instance.FitnessValue - weight_base, 2.0) + 1);
             // сумма "откалиброванных" весов
             double weight_sum = weights.Sum(kvp => kvp.Value);
             // количество в итоговом массиве
