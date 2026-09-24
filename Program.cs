@@ -1,9 +1,58 @@
-﻿namespace GenAlgLab_1_1
+﻿using GeneticAlgorithm;
+
+namespace GenAlgLab_1_1
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            FitnessFunction previous_thing = new(min_x: [0.0], max_x: [1.0], extremes: [[0.3171]],
+                function: x => Math.Sin(6 * x[0] - 1) + Math.Cos(4 * x[0]) + 2 * Math.Pow(x[0], 5),
+                parameter_count: 1);
+
+            FitnessFunction sphere_1d = new(min_x: [-5.12], max_x: [5.12], extremes: [[0.0]],
+                function: x => x[0] * x[0], parameter_count: 1);
+
+            FitnessFunction sphere_2d = new(min_x: -5.12, max_x: 5.12,
+                [0.0], x => x * x);
+            FitnessFunction previous_thing = new(min_x: 0.0, max_x: 1.0,
+                [0.3171], x => Math.Sin(6 * x - 1) + Math.Cos(4 * x) + 2 * Math.Pow(x, 5));
+
+            IGeneticSelector half = new UpperHalfSelector();
+            IGeneticSelector roulette = new RouletteSelector();
+
+            ICrossoverOperator sp = new SingleCrossoverOperator();
+
+            IMutationOperator mutator = new MutationOperator();
+
+            Console.Write("1 для функции сферы, 2 для определённой ранее функции: ");
+            FitnessFunction choice_func = (Console.ReadLine() == "2" ? previous_thing : sphere_2d);
+
+            Console.Write("1 для селекции по умолчанию, 2 для селекции методом рулетки: ");
+            IGeneticSelector choice_select = (Console.ReadLine() == "2" ? roulette : half);
+
+            Console.Write("Количество особей (по умолчанию = 64): ");
+            int count = 64;
+            int.TryParse(Console.ReadLine(), out count);
+
+            Console.Write("Количество поколений (по умолчанию = 64): ");
+            int generations = 16;
+            int.TryParse(Console.ReadLine(), out  generations);
+
+            Console.Write("Шанс мутации (в %, по умолчанию = 5%): ");
+            int percentage = 5;
+            int.TryParse(Console.ReadLine(), out percentage);
+            double mutation_rate = Math.Clamp(percentage * 0.01, 0.0, 1.0);
+
+            Console.Write("Стартовое значение RNG: ");
+            int seed = (new Random().Next());
+            int.TryParse(Console.ReadLine(), out seed);
+
+            GeneticAlgorithm alg = new GeneticAlgorithm(function: choice_func,
+                selector: choice_select, mutator: mutator, crossoverOperator: sp,
+                seed: seed, generations: generations,
+                instance_count: count, mutation_rate: mutation_rate);
+            /////////////////////////////////////////////////////////////////////
             const int GenerationCount = 10;
             var function = new GeneticFunction();
             List<GeneticInstance> population = new List<GeneticInstance>();
