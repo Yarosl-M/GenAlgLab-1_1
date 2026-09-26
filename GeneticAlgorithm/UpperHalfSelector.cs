@@ -10,7 +10,7 @@
             int count = -1, Random? _ = null)
         {
             var all_count = instances.Count();
-            count = (count <= 0) ? Math.Max(1, count / 2) : count;
+            count = (count <= 0) ? Math.Max(1, all_count / 2) : count;
             GeneticInstance[] remaining = instances.OrderByDescending(
                 instance => instance.FitnessValue).Take(count).ToArray();
             return remaining;
