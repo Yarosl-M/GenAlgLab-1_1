@@ -41,7 +41,11 @@
         public GeneticInstance(FitnessFunction function, UInt64[] value)
         {
             Function = function;
-            Value = value;
+            Value = new ulong[value.Length];
+            for (int i = 0; i < value.Length; i++)
+            {
+                Value[i] = value[i];
+            }
         }
         public GeneticInstance(FitnessFunction function, double[] value_real)
         {
