@@ -58,11 +58,13 @@ namespace GenAlgLab_1_1
             Console.WriteLine("1—4 — функции сферы от 1 до 4 аргументов;");
             Console.WriteLine("5   — ранее определённая функция (1 аргумент);");
             Console.WriteLine("6   — функция Била (2 аргумента);");
-            short choice = 1;
-            Console.Write("Выберите функцию: ");
-            short.TryParse(Console.ReadLine(), out choice);
+            int choice = ReadIntOrDefault(
+                "Выберите функцию: ",
+                defaultValue: 1,
+                isValid: value => value is >= 1 and <= 6);
+
             FitnessFunction function =
-                (new FitnessFunction[]
+                new FitnessFunction[]
                 {
                     sphere_1d,
                     sphere_2d,
@@ -70,33 +72,45 @@ namespace GenAlgLab_1_1
                     sphere_4d,
                     previous_thing,
                     beale
-                })[choice - 1];
-            //FitnessFunction choice_func = (Console.ReadLine() == "2" ? previous_thing : sphere_2d);
+                }[choice - 1];
 
-            Console.Write("1 для селекции по умолчанию, 2 для селекции методом рулетки: ");
-            IGeneticSelector choice_select = (Console.ReadLine() == "2" ? roulette : half);
+            Console.Write(
+                "1 для селекции по умолчанию, " +
+                "2 для селекции методом рулетки: ");
 
-            Console.Write("Количество особей (по умолчанию = 64): ");
-            int count = 64;
-            int.TryParse(Console.ReadLine(), out count);
+            int selectorChoice = ReadIntOrDefault(
+                prompt: "",
+                defaultValue: 1,
+                isValid: value => value is 1 or 2);
 
-            Console.Write("Количество поколений (по умолчанию = 64): ");
-            int generations = 16;
-            int.TryParse(Console.ReadLine(), out  generations);
+            IGeneticSelector choiceSelect =
+                selectorChoice == 2 ? roulette : half;
 
-            Console.Write("Шанс мутации (в %, по умолчанию = 5%): ");
-            int percentage = 5;
-            int.TryParse(Console.ReadLine(), out percentage);
-            double mutation_rate = Math.Clamp((double)percentage * 0.01, 0.0, 1.0);
+            int count = ReadIntOrDefault(
+                "Количество особей (по умолчанию = 64): ",
+                defaultValue: 64,
+                isValid: value => value > 0);
 
-            Console.Write("Стартовое значение RNG: ");
-            int seed = (new Random().Next());
-            int.TryParse(Console.ReadLine(), out seed);
+            int generations = ReadIntOrDefault(
+                "Количество поколений (по умолчанию = 16): ",
+                defaultValue: 16,
+                isValid: value => value > 0);
+
+            int percentage = ReadIntOrDefault(
+                "Шанс мутации (в %, по умолчанию = 5%): ",
+                defaultValue: 5,
+                isValid: value => value is >= 0 and <= 100);
+
+            double mutationRate = percentage / 100.0;
+
+            int seed = ReadIntOrDefault(
+                "Стартовое значение RNG: ",
+                defaultValue: Random.Shared.Next());
 
             GeneticAlgorithm alg = new GeneticAlgorithm(function: function,
-                selector: choice_select, mutator: mutator, crossoverOperator: sp,
+                selector: choiceSelect, mutator: mutator, crossoverOperator: sp,
                 seed: seed, generations: generations,
-                instance_count: count, mutation_rate: mutation_rate);
+                instance_count: count, mutation_rate: mutationRate);
 
             var stats_history = new GenerationStats[generations + 1];
             // oh dayum
@@ -168,5 +182,23 @@ namespace GenAlgLab_1_1
             Console.WriteLine();
             Console.WriteLine("График сохранён: generation_stats.png");
         }
+
+        private static int ReadIntOrDefault(
+    string prompt,
+    int defaultValue,
+    Func<int, bool>? isValid = null)
+{
+    Console.Write(prompt);
+
+    string? input = Console.ReadLine();
+
+    if (int.TryParse(input, out int value) &&
+        (isValid is null || isValid(value)))
+    {
+        return value;
+    }
+
+    return defaultValue;
+}
     }
 }
