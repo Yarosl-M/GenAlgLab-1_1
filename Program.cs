@@ -135,10 +135,10 @@ namespace GenAlgLab_1_1
                     $"{s.MeanDistance:F5} | {s.StdDevDistance:F5}");
             }
 
-            //PlotStats(stats_history);
+            PlotStats(stats_history);
         }
 
-        static void PlotStats(List<GenerationStats> history)
+        static void PlotStats(IList<GenerationStats> history)
         {
             var plt = new ScottPlot.Plot();
 
@@ -179,9 +179,9 @@ namespace GenAlgLab_1_1
             plt.YLabel("Расстояние до x экстремума");
             plt.ShowLegend();
 
-            plt.SavePng("generation_stats.png", 1000, 600);
+            var path = plt.SavePng("generation_stats.png", 1000, 600).Path;
             Console.WriteLine();
-            Console.WriteLine("График сохранён: generation_stats.png");
+            Console.WriteLine($"График сохранён: {path}");
         }
 
         private static int ReadIntOrDefault(
