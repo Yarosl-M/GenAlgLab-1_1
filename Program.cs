@@ -36,7 +36,11 @@ namespace GenAlgLab_1_1
                 min_x: [-5.12, -5.12, -5.12, -5.12],
                 max_x: [5.12, 5.12, 5.12, 5.12],
                 extremes: [[0.0, 0.0, 0.0, 0.0]],
-                function: x => -(-x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3]),
+                function: x => -(
+                    x[0] * x[0] +
+                    x[1] * x[1] +
+                    x[2] * x[2] +
+                    x[3] * x[3]),
                 parameter_count: 4);
 
             FitnessFunction beale = new(
