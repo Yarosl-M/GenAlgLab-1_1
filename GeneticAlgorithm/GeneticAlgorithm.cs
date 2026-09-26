@@ -110,15 +110,18 @@ namespace GenAlgLab_1_1
             population = selected.Concat(to_add).Take(InstanceCount).ToArray(); ;
 
             // 3) мутации                                   (Mutator)
-            foreach (var instance in population)
+            for (int i = 0; i < population.Length; i++)
             {
                 if (rng.NextDouble() < MutationRate)
                 {
-                    Mutator.Mutate(instance, rng.Next(MutationCountMin, MutationCountMax + 1), rng);
+                    population[i] = Mutator.Mutate(
+                        instance: population[i],
+                        count: rng.Next(MutationCountMin, MutationCountMax),
+                        rng: rng);
                 }
             }
 
-            Population = population; // ????? // although yes now
+            Population = population; // ????? 
 
             return generations_passed++;
         }

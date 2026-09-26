@@ -9,6 +9,16 @@ namespace GeneticAlgorithm
 {
     public interface IMutationOperator
     {
-        public void Mutate(GeneticInstance instance, int count = 1, Random? rng = null);
+        /// <summary>
+        /// Выполняет мутацию указанной особи.
+        /// </summary>
+        /// <param name="instance">Исходная особь для мутации.</param>
+        /// <param name="count">Количество мутаций в геноме (применяется
+        /// отдельно для каждого гена/параметра).</param>
+        /// <param name="rng">Необязательно — объект ГСЧ для обеспечения
+        /// повторяемости результатов.</param>
+        /// <returns>Новый объект-особь с применённой мутацией;
+        /// исходная особь не изменяется.</returns>
+        public GeneticInstance Mutate(GeneticInstance instance, int count = 1, Random? rng = null);
     }
 }
