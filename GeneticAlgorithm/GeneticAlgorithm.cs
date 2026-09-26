@@ -118,7 +118,7 @@ namespace GenAlgLab_1_1
                 {
                     population[i] = Mutator.Mutate(
                         instance: population[i],
-                        count: rng.Next(MutationCountMin, MutationCountMax),
+                        count: rng.Next(MutationCountMin, MutationCountMax + 1),
                         rng: rng);
                 }
             }

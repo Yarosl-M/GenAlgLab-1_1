@@ -119,12 +119,13 @@ namespace GenAlgLab_1_1
             // be before the start of the algorithm
             stats_history[0] = new GenerationStats(0, alg.Population);
             int gen = 0;
-            do
+            for (gen = 0;  gen < generations; gen++)
             {
-                gen = alg.Step() + 1;
-                stats_history[gen] = new(gen, alg.Population);
-            } while (gen != -1);
+                alg.Step();
+                stats_history[gen + 1] = new(gen + 1, alg.Population);
+            }
 
+            // why was I even doing that old thing in the first place?????
 
             Console.WriteLine("Поколение | min | max | mean | std (расстояние до экстремума)");
             foreach (var s in stats_history)
