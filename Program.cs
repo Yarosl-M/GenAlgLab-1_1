@@ -87,7 +87,7 @@ namespace GenAlgLab_1_1
             Console.Write("Шанс мутации (в %, по умолчанию = 5%): ");
             int percentage = 5;
             int.TryParse(Console.ReadLine(), out percentage);
-            double mutation_rate = Math.Clamp(percentage * 0.01, 0.0, 1.0);
+            double mutation_rate = Math.Clamp((double)percentage * 0.01, 0.0, 1.0);
 
             Console.Write("Стартовое значение RNG: ");
             int seed = (new Random().Next());

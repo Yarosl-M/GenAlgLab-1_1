@@ -53,9 +53,11 @@ namespace GenAlgLab_1_1
             CrossoverOperator = crossoverOperator;
             GenerationCount = generations;
             InstanceCount = instance_count;
+            Mutator = mutator;
             MutationRate = mutation_rate;
             MutationCountMin = min_mutation_count;
             MutationCountMax = max_mutation_count;
+
             Seed = seed is null ? new Random().Next() : seed.Value;
             rng = new Random(Seed);
             // create instance array
